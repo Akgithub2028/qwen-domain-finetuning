@@ -1,1 +1,371 @@
 
+index,instruction,topic,difficulty,baseline_rougeL,finetuned_rougeL,improvement
+0,"Is there *any* scenario where a learned absolute positional embedding is a better choice than RoPE or ALiBi, even knowing its extrapolation limitations?","Positional encoding schemes (RoPE, ALiBi, learned) and extrapolation behavior",senior,0.10485436893203882,0.12213740458015267,0.017283035648113843
+1,"I'm implementing a custom attention mechanism and noticed that when my sequence length approaches the total number of physical memory pages, `malloc` calls for KV tensors start failing or becoming extremely slow. I'm not explicitly using PagedAttention. Is this expected behavior?",KV cache memory math and context length scaling,staff,0.13963039014373715,0.26666666666666666,0.1270362765229295
+2,"I'm preparing my dataset for DPO and sometimes the `rejected` response is much longer than the `chosen` response, or vice versa. Is that a problem for DPO? I'm using `tokenizer.pad=True`.",DPO/IPO preference optimization pitfalls,junior,0.1303370786516854,0.16,0.029662921348314608
+3,"Beyond marginal accuracy gains, when is QAT an absolute requirement over PTQ, regardless of implementation complexity?",Quantization-aware training vs post-training quantization,senior,0.11522633744855966,0.10344827586206896,-0.011778061586490696
+4,"I'm planning an experiment to compare our new text classifier with 'BigTextNet' from a recent paper. They used a proprietary 10TB dataset, but we only have 1TB of public data. We'll use the same architecture. Is this a fair comparison?","Reading a paper's results table skeptically (cherry-picked baselines, missing error bars, unfair comparisons)",junior,0.09421841541755889,0.15763546798029557,0.06341705256273668
+5,"I implemented a custom activation function for my decoder blocks: `lambda x: x * torch.tanh(x)`. It seemed to work fine on a small dataset but now with 100B params, training is unstable, often dying within the first 1000 steps. Anything obvious with this activation?","Diagnosing training instability (loss spikes, gradient norm explosions, dead neurons)",staff,0.10268948655256724,0.14457831325301204,0.0418888267004448
+6,"My RLHF training run for a chatbot model just diverged after about 200 optimization steps. The reward signal went from positive to wildly negative, and the PPO KL divergence metric went through the roof. What should I check?","Diagnosing training instability (loss spikes, gradient norm explosions, dead neurons)",junior,0.11868131868131866,0.16194331983805668,0.04326200115673802
+7,"We need to process extremely long legal documents (average 500k words) for RAG augmentation, specifically extracting key clauses and summarizing sections. Our current approach uses a chunking strategy with a GPT-3.5 turbo and it's missing too much context. I'm proposing fine-tuning a Mamba-7B. Any red flags?",State space models / Mamba vs transformer tradeoffs,staff,0.11845102505694761,0.13475177304964542,0.016300747992697803
+8,"I'm prototyping an RNN-based image captioning model. The captions are typically around 20-30 words. For the RNN decoder, I was planning on using a simple RNN cell with `tanh` activation. Any red flags here?",Explaining backpropagation through time and its failure modes,senior,0.13157894736842105,0.1642512077294686,0.03267226036104756
+9,"I'm using the LARS optimizer, which I heard does its own form of layer-wise adaptive gradient scaling. Does this mean I don't need `clip_grad_norm_` at all?","Gradient clipping — when, why, and what threshold",junior,0.15897435897435896,0.18779342723004697,0.028819068255688002
+10,"I'm trying to replace a standard `torch.nn.Linear` layer with our new `SparseAdaptiveLinear` layer in a pre-trained LLM for fine-tuning. When I load the state_dict, I get: `RuntimeError: Error(s) in loading state_dict for MyModel: size mismatch for MyModel.encoder.layer.0.attn.sparse_adaptive_linear.weight: copying a param with shape torch.Size([1024, 2048]) from checkpoint, but the current model has shape torch.Size([1024, 1024]).` What's the likely issue here if it's supposed to be a drop-in replacement?",Critiquing a novel architecture proposal for missing ablations or confounds,senior,0.14463840399002492,0.13229571984435798,-0.012342684145666943
+11,"We're trying to extend our Llama-2-13B's context from 4k to 16k. My plan is to update `max_position_embeddings` to 16384 in the config, then finetune on long sequences using LoRA. Are there any hidden gotchas with this approach?",KV cache memory math and context length scaling,senior,0.10141987829614606,0.14388489208633093,0.04246501379018487
+12,"We deployed a new version of our conversational agent model, which includes gradient clipping (`max_norm=1.0`) that wasn't there before. Now, some long conversations are generating nonsensical responses much faster than before. Training loss curves looked fine.","Gradient clipping — when, why, and what threshold",senior,0.12612612612612611,0.17431192660550457,0.048185800479378454
+13,"Getting `ValueError: Expected 3D tensor, got 2D` inside a custom Transformer block in TensorFlow after applying LayerNormalization. My block looks like: `x = self.layer_norm1(x) + self.attention(x); x = self.layer_norm2(x) + self.mlp(x)`. This is supposed to be Pre-LN, right?",Explaining why layer norm placement (pre-LN vs post-LN) affects training stability,senior,0.1437371663244353,0.2139917695473251,0.07025460322288979
+14,I'm a bit confused by 'compute-optimal' vs 'parameter-optimal' scaling. Which one should we care about for LLMs today?,Explaining scaling laws and what they do/don't predict,junior,0.09643605870020966,0.11162790697674418,0.015191848276534525
+15,"My model's precision dropped 15% overnight after a new deploy, but the feature distributions coming into it look identical to yesterday. I'm using `evidentlyai` for this check, and all KS-tests passed. What gives?",Common interview question: design a system to detect model drift in production,senior,0.08755760368663594,0.13008130081300812,0.042523697126372176
+16,I'm running `llama.cpp`'s `main` server locally for a quick test. My command is: `./llama.cpp/main -m models/7B/gguf-model.bin -c 2048 -b 512 --port 8080 --host 0.0.0.0`. I want to handle a few concurrent requests. Is there anything I should add or change?,"Model serving architecture (vLLM, TGI, llama.cpp tradeoffs)",junior,0.13,0.1324503311258278,0.0024503311258277927
+17,What's the best way to deduplicate my instruction tuning dataset? I'm using a mix of ShareGPT and some synthetic data.,"Data curation for instruction tuning (dedup, quality filtering, diversity)",junior,0.11180124223602483,0.15544041450777202,0.043639172271747184
+18,Is FP16 mixed precision just a form of quantization? What's the fundamental difference in purpose?,"Mixed precision training pitfalls (fp16 vs bf16, loss scaling, gradient underflow)",staff,0.1085972850678733,0.15384615384615385,0.04524886877828055
+19,"Training stalled completely after about 3 hours, no error, just hung. `nvidia-smi` showed 0% util across all GPUs. We had `timeout=60` set on our `DataLoader`. What could be going on?","Dataloader bottlenecks and how to profile/fix them (num_workers, pin_memory, prefetch)",staff,0.10062893081761005,0.14049586776859502,0.03986693695098496
+20,"Our plan is to have a team of 3 engineers spend a week manually coming up with red-team prompts. We figure 3 people, 5 days, 8 hours a day, 10 prompts an hour... that's 1200 prompts. That should be enough for our first release, right?",Designing a red-team eval set for a new model release,junior,0.1059322033898305,0.11072664359861592,0.0047944402087854165
+21,"We trained a new vision-language model using a curriculum that prioritized image-caption pairs with high semantic similarity scores initially, then gradually introduced more diverse pairs. The model converged very fast to a low training loss, but our downstream evaluation on COCO zero-shot captions and VQA shows significantly worse performance than our baseline, which used random sampling. What could be the issue?",Curriculum learning and data ordering effects,staff,0.12662942271880823,0.15873015873015872,0.032100736011350495
+22,"We shipped a model, passed all our red-team evals for PII leakage, but within hours, a user reported it spitting out credit card numbers. Our eval included prompts asking for 'my credit card' or 'my SSN'. What did we miss?",Designing a red-team eval set for a new model release,staff,0.10244988864142539,0.15593220338983052,0.05348231474840513
+23,"Review this Python snippet for calculating daily CTR in our A/B test dashboard. Seems straightforward:
+```python
+def calculate_daily_ctr(df_events):
+    df_events['is_click'] = df_events['event_type'] == 'click'
+    daily_summary = df_events.groupby('date').agg(
+        total_clicks=('is_click', 'sum'),
+        total_impressions=('event_type', lambda x: (x == 'impression').sum())
+    )
+    daily_summary['ctr'] = daily_summary['total_clicks'] / daily_summary['total_impressions']
+    return daily_summary
+```","A/B testing a model change in production (statistical power, guardrail metrics)",senior,0.12184873949579832,0.12720848056537104,0.005359741069572724
+24,"I'm using DVC for data versioning, and I just ran `dvc add data/raw/images`. Now my Git status shows `data/raw/images.dvc`. Is that all I need to do?",Versioning and reproducibility for ML experiments,junior,0.22123893805309736,0.22549019607843138,0.00425125802533402
+25,"I'm calculating the KL penalty in my PPO loss. I use `F.kl_div(log_probs_new, log_probs_sft, reduction='batchmean') * ppo_config.kl_beta`. `log_probs_sft` comes from my initial SFT model. Is this correct?","RLHF pipeline design (reward model, PPO, KL penalty tuning)",junior,0.19339622641509435,0.24113475177304966,0.04773852535795531
+26,Does reward shaping make reward hacking worse or better? I'm trying to guide my agent faster.,Reward hacking diagnosis and mitigation,junior,0.18749999999999997,0.2702702702702703,0.08277027027027031
+27,"We're planning a new training run for a 7B LLM using FSDP. The current checkpointing strategy involves each rank saving its local shard of the optimizer and model state, then rank 0 aggregates these into a single checkpoint file. We'll use `dist.barrier()` before and after saving. Does this sound like a robust approach?","Distributed training failures (NCCL hangs, rank mismatches, gradient sync bugs)",senior,0.14713896457765668,0.17813765182186236,0.03099868724420568
+28,"When should I use activation checkpointing? Does it always save memory, or are there trade-offs?","GPU memory debugging (OOM diagnosis, activation checkpointing tradeoffs, memory fragmentation)",junior,0.11498973305954825,0.19730941704035876,0.0823196839808105
+29,"Is there a rule of thumb for how long to keep the 'easy' phase in a curriculum (e.g., short sequences, highly filtered data) before introducing more complex data for a large LLM pre-training run?",Curriculum learning and data ordering effects,senior,0.11899313501144165,0.13765182186234817,0.01865868685090652
+30,"I'm trying to get `torch.compile` to speed up my simple MLP. It works for a few iterations but then I see a 'graph break' message in the logs, and it seems to recompile or fall back to eager mode. What are the most common things that cause these breaks?",torch.compile graph breaks and how to diagnose/fix them,junior,0.09977324263038548,0.1217391304347826,0.021965887804397122
+31,"My RoPE implementation seems to be applying positions incorrectly. When I inspect the `freqs` tensor, it looks like it's applying the same rotation to all tokens in the sequence sometimes. Here's a simplified view of my `pos_ids` generation logic: `pos_ids = torch.zeros(batch_size, seq_len, dtype=torch.long)` then I call `apply_rope(x, pos_ids)`. What's wrong?","Positional encoding schemes (RoPE, ALiBi, learned) and extrapolation behavior",junior,0.15350877192982457,0.1506024096385542,-0.0029063622912703646
+32,"For a new transformer training run on a large dataset (200B tokens), I plan to save a model checkpoint only at the end of each epoch. An epoch will take roughly 8-10 hours. Does that sound reasonable for fault tolerance?","Setting up a remote training job correctly (daemonization, logging, checkpoint cadence)",senior,0.0935412026726058,0.11650485436893204,0.022963651696326248
+33,"We're planning to dynamically adjust the PPO `target_kl` based on the moving average of the episodic reward. If reward increases, we'd cautiously increase `target_kl` to encourage more exploration; if reward drops or plateaus, we'd decrease it to stabilize. Thoughts?","RL training instability (KL divergence blowup, policy collapse, reward model overfitting)",staff,0.12669683257918554,0.1641337386018237,0.03743690602263816
+34,We're setting up a new distributed training run for a 13B model using `torch.distributed.DDP`. Here's a snippet of our DDP setup. Any red flags?,Explaining scaling laws and what they do/don't predict,senior,0.056338028169014086,0.12206572769953052,0.06572769953051644
+35,"What's a good starting value for `init_scale` in `torch.cuda.amp.GradScaler`? I'm using a batch size of 256, a standard AdamW optimizer, and fine-tuning a BERT-sized model.","Mixed precision training pitfalls (fp16 vs bf16, loss scaling, gradient underflow)",junior,0.13821138211382114,0.12745098039215688,-0.010760401721664259
+36,"For a new seq2seq model, I'm trying to decide between `tanh` and `ReLU` for the hidden states of my simple RNN encoder. `ReLU` is usually better for deep feedforwards, but I've seen `tanh` in RNN examples. Which one should I pick to avoid BPTT issues?",Explaining backpropagation through time and its failure modes,junior,0.09389671361502347,0.09876543209876541,0.004868718483741943
+37,What's the core idea behind MoE and when would I choose it over a standard dense transformer? I'm trying to understand the fundamental trade-off.,Tradeoffs between dense vs sparse (MoE) models at a given inference budget,junior,0.14351851851851852,0.17682926829268295,0.03331074977416443
+38,We developed a new RL agent for a custom trading environment. We want to show it's better than DDPG and SAC. We're running DDPG and SAC with their default hyperparameters from Stable Baselines3. Is this sufficient for our baselines?,"Reading a paper's results table skeptically (cherry-picked baselines, missing error bars, unfair comparisons)",staff,0.09859154929577466,0.17194570135746604,0.07335415206169138
+39,I'm trying to decide between AWQ and GPTQ for quantizing a 70B model for edge deployment. Any strong opinions on which to prioritize?,"Quantization tradeoffs (GGUF Q4/Q5/Q8, GPTQ, AWQ) and when to use each",staff,0.09501187648456057,0.16216216216216214,0.06715028567760158
+40,Reviewing this part of our internal report: 'We trained Model A for 50 epochs with a batch size of 64 and Model B for 20 epochs with batch size 16. Model A achieved higher accuracy.',"Reading a paper's results table skeptically (cherry-picked baselines, missing error bars, unfair comparisons)",junior,0.12734082397003743,0.12765957446808512,0.00031875049804769295
+41,We have a server with multiple H100s. We're thinking about using a Q8 GGUF for a Llama-3-70B model with `llama.cpp` to get maximum throughput. Is Q8 GGUF the best option for this setup or should we stick to FP16/BF16?,"Quantization tradeoffs (GGUF Q4/Q5/Q8, GPTQ, AWQ) and when to use each",senior,0.14213197969543148,0.1908713692946058,0.048739389599174315
+42,When should I choose IPO over DPO? Are the hyperparameters similar?,DPO/IPO preference optimization pitfalls,senior,0.07476635514018692,0.11894273127753305,0.044176376137346124
+43,"I ran Nsight Systems on my custom activation kernel, and the timeline shows my kernel taking much longer than expected. The 'SM Activity' graph shows high occupancy but fluctuating 'Active Warps' and 'Eligible Warps' with 'Divergent Warps' spiking during execution. What's this telling me?",Custom CUDA kernel debugging basics and when you actually need one,senior,0.09406952965235173,0.125,0.030930470347648273
+44,"I moved my training code from a single-GPU machine (RTX 3090, 16 CPU cores) to a new server with 8 A100s and 64 CPU cores. I expected it to be much faster, but each training step is actually taking *longer* on the new machine. What gives?","Dataloader bottlenecks and how to profile/fix them (num_workers, pin_memory, prefetch)",junior,0.10438413361169104,0.128686327077748,0.024302193466056957
+45,"Review this `data_split.py` for potential issues. I'm using `huggingface/datasets`.
+```python
+from datasets import load_dataset
+dataset = load_dataset('my_corpus', split='train')
+train_test_split = dataset.train_test_split(test_size=0.05, seed=42)
+train_dataset = train_test_split['train']
+test_dataset = train_test_split['test']
+# Later, I'm taking a subset of 'train_dataset' for validation.
+val_dataset = train_dataset.train_test_split(test_size=0.1)['test']
+```","Dataset contamination detection (train/test overlap, benchmark leakage)",senior,0.29739776951672864,0.2045454545454545,-0.09285231497127414
+46,What's the most effective hashing strategy for detecting exact duplicates across a 1TB text dataset when memory is limited?,"Dataset contamination detection (train/test overlap, benchmark leakage)",staff,0.1073170731707317,0.14492753623188406,0.03761046306115236
+47,"We deployed a new image captioning model, `BLIP-2` (finetuned on MS-COCO) to handle user-uploaded images. After a week, our cloud egress costs skyrocketed by 200%, and image processing latency went from 1s P99 to over 5s P99. We were expecting better performance.",Cost/latency tradeoffs in model selection for a product feature,staff,0.11001964636542241,0.17567567567567566,0.06565602931025324
+48,What's the difference between `torch.nn.utils.clip_grad_norm_` and `clip_grad_value_`? When would I use one over the other?,"Gradient clipping — when, why, and what threshold",senior,0.17061611374407581,0.16624685138539044,-0.004369262358685372
+49,"Review this `init_weights` function. We're using it for our custom MLP mixer block. ```python def init_weights(m): if isinstance(m, (nn.Linear, nn.Conv2d)): nn.init.xavier_normal_(m.weight) if m.bias is not None: nn.init.constant_(m.bias, 0) ```",Weight initialization schemes and why they matter at scale,staff,0.08470588235294119,0.11726384364820847,0.03255796129526728
+50,"Our MoE model's perplexity plateaued significantly higher than expected after 200k steps, and looking at our custom expert usage logs, some experts are consistently seeing 5x the load of others. The `aux_loss` was enabled with a weight of 0.01.",Mixture-of-Experts routing design choices and load balancing,senior,0.10799999999999998,0.234375,0.12637500000000002
+51,"We have a custom C++ CUDA kernel that we call directly from Python using `torch.ops.my_lib.my_kernel(...)`. When I `torch.compile` my model, it always hits a graph break right before this kernel call. How do I get `torch.compile` to include my custom kernel in the compiled graph?",torch.compile graph breaks and how to diagnose/fix them,senior,0.11914893617021279,0.13736263736263735,0.01821370119242456
+52,"We're deploying a custom `Sentence-BERT` model for semantic search. Here's our `Dockerfile`. Any issues from a performance or cost perspective? ```dockerfile
+FROM pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+EXPOSE 8000
+CMD [""python"", ""app.py""]
+```",Cost/latency tradeoffs in model selection for a product feature,junior,0.1179138321995465,0.1610738255033557,0.043159993303809194
+53,What are the absolute minimum pieces of state I need to save in a checkpoint to be able to resume training effectively on a preemptible instance? I'm using PyTorch.,Designing a training job that survives preemption/spot instance interruption,junior,0.12106537530266345,0.20472440944881887,0.08365903414615541
+54,"Review this activation checkpointing setup. We're getting OOMs occasionally still.
+```python
+import torch.utils.checkpoint as checkpoint
+# ...
+def forward(self, input_ids, attention_mask):
+    hidden_states = self.embed_tokens(input_ids)
+    for layer in self.layers:
+        hidden_states = checkpoint.checkpoint(layer, hidden_states, attention_mask, use_reentrant=False)
+    return self.norm(hidden_states)
+```","GPU memory debugging (OOM diagnosis, activation checkpointing tradeoffs, memory fragmentation)",senior,0.11673151750972761,0.15671641791044774,0.03998490040072013
+55,"Our int8 quantized LLM works great for short queries (up to 128 tokens), but performance drops off a cliff for longer inputs (e.g., 512+ tokens). We calibrated using a dataset where the average sequence length was around 64 tokens, with a max of 128. Is this the problem?",Calibration dataset choice for post-training quantization,senior,0.15496368038740918,0.18587360594795538,0.030909925560546198
+56,"We're fine-tuning an LLM for a low-resource indigenous language. Annotation resources are extremely scarce, and qualified linguists are hard to find. How can we still build a meaningful eval suite for quality and bias detection?","Designing an eval suite for a new fine-tune (what to measure, contamination risks)",senior,0.10963455149501661,0.13465346534653466,0.025018913851518054
+57,"My policy entropy drops to near zero very quickly, usually within the first 500 steps, even with a non-zero `entropy_coeff`. The model then struggles to improve. What should I check?","RL training instability (KL divergence blowup, policy collapse, reward model overfitting)",senior,0.10227272727272728,0.17034700315457413,0.06807427588184685
+58,"I'm running `optimum.quanto.quantize` for dynamic quantization on a new Mamba-based model, and with my current calibration dataset, I frequently hit `RuntimeError: 'quantized_int8_linear_tensor_affine' received an unsupported value for argument 'scale_qparam'. Expected a float, but got a tensor.` This only happens when I include very sparse, highly technical documents in my calibration set. With general text, it works fine.",Calibration dataset choice for post-training quantization,staff,0.1208053691275168,0.1272727272727273,0.006467358145210489
+59,"We're setting up distributed training with FSDP. To save space, we only save checkpoints on rank 0. When resuming, we load the full model state on rank 0, then initialize FSDP. Is this robust?","Checkpoint resume bugs (optimizer state mismatch, torch.compile state_dict prefix issues, LR schedule discontinuity)",junior,0.16097560975609757,0.2246376811594203,0.06366207140332272
+60,"When I resume training from a checkpoint, my learning rate immediately jumps to max again instead of continuing its decay. I'm using `torch.optim.lr_scheduler.CosineAnnealingLR`. What am I missing?","Checkpoint resume bugs (optimizer state mismatch, torch.compile state_dict prefix issues, LR schedule discontinuity)",junior,0.14512471655328799,0.20080321285140562,0.055678496298117636
+61,When would it actually be *bad* to use a 'variance-preserving' initialization like He or Xavier? It seems like they're always recommended for deep nets.,Weight initialization schemes and why they matter at scale,junior,0.1298245614035088,0.1564625850340136,0.026638023630504826
+62,"Our model's F1 score dropped from 0.85 to 0.70 overnight, but all the input feature drift monitors are green. We're using Kolmogorov-Smirnov for numerical and Chi-squared for categorical. What gives? Our data team insists the upstream pipeline didn't change.",Common interview question: design a system to detect model drift in production,staff,0.1092436974789916,0.12962962962962962,0.020385932150638025
+63,"I need to fine-tune a BERT-base equivalent model (110M params) on a specialized dataset. I have access to a cluster with A100 80GB GPUs. Should I just use one of those, or is it overkill? I want to finish quickly.","Choosing GPU hardware for a training job (VRAM math, interconnect bandwidth, cost-per-token)",junior,0.12313432835820896,0.18072289156626506,0.057588563208056096
+64,"My training run for a 7B LLM on 8x A100s just crashed. Log shows `loss: nan` and the stack trace points to the backward pass. Before that, my gradients were spiking - I saw `grad_norm: 1200.5` in my wandb logs for a few steps, then it went `nan`. What's the immediate fix?","Gradient clipping — when, why, and what threshold",staff,0.09111617312072894,0.17142857142857143,0.0803123983078425
+65,"Trying to load a GPTQ-quantized Llama-2-7B model with vLLM using `model = LLM(model='TheBloke/Llama-2-7B-GPTQ', quantization='gptq')`. It errors out with `ValueError: 'gptq' is not a valid quantization method.` What am I missing?","Model serving architecture (vLLM, TGI, llama.cpp tradeoffs)",senior,0.20327868852459016,0.20634920634920634,0.0030705178246161757
+66,"How do I calculate the memory used by KV cache for a single transformer layer during inference, assuming `bfloat16` precision?",KV cache memory math and context length scaling,junior,0.1351981351981352,0.19302949061662197,0.057831355418486774
+67,Got this after a few epochs on a new experimental vision model. Loss: 0.5 -> 0.3 -> 0.7 -> NaN. This happened a few times. What's the usual culprit when loss goes to NaN so quickly?,Overfitting vs underfitting diagnosis from loss curves alone,staff,0.10901467505241091,0.20202020202020202,0.0930055269677911
+68,"I'm seeing `KeyError: 'param_groups'` when I try to load my optimizer state after making a small architecture change to my model (added one `nn.Linear` layer) and then reloading a checkpoint saved *before* the change. My resume logic: `model.load_state_dict(ckpt['model_state_dict'])`, then `optimizer.load_state_dict(ckpt['optimizer_state_dict'])`. What gives?","Checkpoint resume bugs (optimizer state mismatch, torch.compile state_dict prefix issues, LR schedule discontinuity)",staff,0.1446808510638298,0.1702127659574468,0.025531914893617003
+69,"I'm trying to load a `state_dict` saved from an uncompiled model into a model that I just wrapped with `torch.compile`. I'm getting `RuntimeError: Error(s) in loading state_dict for MyModel: Missing key(s) in state_dict: ""_orig_mod.transformer.wte.weight""` and many others like it. What's the deal with `_orig_mod`?","Checkpoint resume bugs (optimizer state mismatch, torch.compile state_dict prefix issues, LR schedule discontinuity)",staff,0.19103313840155947,0.21983914209115282,0.02880600368959335
+70,"To evaluate our new medical chatbot, we're planning to use a subset of questions from MedQA and USMLE, translated into conversational turns. Our training data is a mix of medical textbooks and transcribed doctor-patient dialogues. We think this will give us a good measure of its clinical reasoning.","Dataset contamination detection (train/test overlap, benchmark leakage)",junior,0.11688311688311688,0.09411764705882353,-0.022765469824293352
+71,"I'm trying to implement a custom GRU cell and my memory usage keeps exploding. Here's the core loop. What am I missing?
+```python
+class CustomGRU(nn.Module):
+    def __init__(self, ...):
+        super().__init__()
+        # ... define layers for reset_gate, update_gate, new_state
+
+    def forward(self, input, h_prev):
+        # ... calculate gates and new_h
+        return new_h, new_h # return new_h twice for compatibility
+```
+Then in the training loop:
+```python
+hidden_state = torch.zeros(...)
+for t in range(seq_len):
+    output, hidden_state = model(input_seq[t], hidden_state)
+    # loss calculation and backward call here, but detached for simplicity
+```",Explaining backpropagation through time and its failure modes,staff,0.09312638580931265,0.20276497695852536,0.1096385911492127
+72,What's the main difference between AdamW and just Adam for fine-tuning a BERT model? Does it really matter?,Choosing optimizers (AdamW vs Lion vs Sophia) and when it matters,junior,0.1374722838137472,0.14598540145985403,0.008513117646106821
+73,I'm trying to implement a simple SSM for a project. Here's the core recurrence: `h_t = A @ h_{t-1} + B @ x_t`. Is this missing anything important for it to be competitive with a Transformer?,State space models / Mamba vs transformer tradeoffs,junior,0.0935412026726058,0.13333333333333333,0.03979213066072754
+74,"I'm reviewing a `pytorch_lightning` training config. The `configure_optimizers` method defines an `AdamW` optimizer and then immediately schedules `torch.optim.lr_scheduler.StepLR(optimizer, step_size=1000)`. There's no explicit mention of warmup. What's the most critical feedback?",Learning rate schedule design and warmup tuning,senior,0.10106382978723404,0.1568627450980392,0.05579891531080518
+75,"I'm planning an RLHF experiment where I'll train my reward model on a dataset of human preferences. I'll then use this fixed reward model to train my LLM with PPO. I plan to use a single, fixed `kl_coeff` value for the PPO objective, say 0.02, based on what I've seen in some examples. Does this sound like a solid plan for a first run?","RL training instability (KL divergence blowup, policy collapse, reward model overfitting)",junior,0.13333333333333333,0.19200000000000003,0.0586666666666667
+76,"We pre-trained a Llama-style model for 2T tokens on a 2048 context window with RoPE, then tried to fine-tune it on a long-form dataset (up to 8192 tokens), just by changing `max_position_embeddings` and passing longer sequences. Performance on long-form tasks is terrible, even worse than a baseline without fine-tuning. Short-form tasks are fine. What's the most probable cause of this regression?","Positional encoding schemes (RoPE, ALiBi, learned) and extrapolation behavior",senior,0.12269938650306747,0.17123287671232876,0.04853349020926129
+77,"Hey, I keep hearing 'reward hacking' thrown around. Can you give me a concrete, technical example of what it looks like in an RL setting, not just the abstract 'agent found a loophole' stuff?",Reward hacking diagnosis and mitigation,junior,0.15,0.24800000000000003,0.09800000000000003
+78,"My team is debating if we can just use our existing production monitoring for model performance (like RMSE, F1 score) to detect concept drift. Why isn't that sufficient?",Common interview question: design a system to detect model drift in production,junior,0.09670329670329669,0.12025316455696201,0.02354986785366532
+79,"We have a custom `collate_fn` for handling variable-length sequences with padding. Here's the relevant part: `def custom_collate(batch): max_len = max(len(x['input_ids']) for x in batch) padded_batch = [] for item in batch: item['input_ids'] = F.pad(item['input_ids'], (0, max_len - len(item['input_ids']))) padded_batch.append(item) return default_collate(padded_batch)`","Dataloader bottlenecks and how to profile/fix them (num_workers, pin_memory, prefetch)",senior,0.09836065573770493,0.18867924528301885,0.09031858954531392
+80,"From a systems perspective, how does MoE affect peak theoretical throughput (QPS) differently than per-token latency, compared to a dense model of similar 'quality'?",Tradeoffs between dense vs sparse (MoE) models at a given inference budget,staff,0.1279620853080569,0.15853658536585366,0.030574500057796772
+81,"Hey, I'm seeing a lot of recent Transformer models use 'Pre-LN' and older ones use 'Post-LN'. What's the actual difference and why does it matter for training stability?",Explaining why layer norm placement (pre-LN vs post-LN) affects training stability,junior,0.1473684210526316,0.14241486068111456,-0.004953560371517035
+82,We introduced a new 'Adversarial Stability Loss' to regularize our GAN's discriminator. We're seeing more stable training and better FID. Is there a common pitfall to watch out for with these kinds of regularization losses?,Critiquing a novel architecture proposal for missing ablations or confounds,staff,0.11133200795228629,0.19298245614035087,0.08165044818806458
+83,"Why is loss scaling often unnecessary when using `bf16` mixed precision, unlike `fp16`?","Mixed precision training pitfalls (fp16 vs bf16, loss scaling, gradient underflow)",senior,0.12162162162162161,0.19622641509433963,0.07460479347271802
+84,"We're generating synthetic instructions from a seed set. Our plan is to take existing `instruction`s, use GPT-4 to paraphrase them, and then generate a new `response` for each. This should boost our dataset size significantly. Good idea?","Data curation for instruction tuning (dedup, quality filtering, diversity)",senior,0.10933940774487472,0.1589958158995816,0.04965640815470687
+85,"Our fine-tuning run for a custom 3B model diverged very early, around 100 steps. We were using a peak LR of `1e-5` with AdamW, and `warmup_steps=10` (total steps `10000`). We then tried `warmup_steps=100`, and it still diverged at step 100. What's going on?",Learning rate schedule design and warmup tuning,senior,0.1118881118881119,0.16,0.0481118881118881
+86,"We had a stable LLaMA 7B fine-tune on a single A100 with `per_device_train_batch_size=128`. We're now moving to a multi-node setup (4x A100s per node, 2 nodes) and using `per_device_train_batch_size=16` with `gradient_accumulation_steps=8`. The global effective batch size is still 128 * 8 = 1024, but our downstream task accuracy regressed from 78% to 72%. Why?",Batch size / gradient accumulation tradeoffs and effective batch size math,staff,0.1306122448979592,0.19875776397515527,0.06814551907719607
+87,"For a highly sparse tensor operation (98% zeros) that's a key part of our model, PyTorch's sparse ops aren't performing well because our sparsity pattern is very specific (block-diagonal with random internal sparsity). We're considering a custom kernel. Is this a good use case?",Custom CUDA kernel debugging basics and when you actually need one,staff,0.12796208530805686,0.21004566210045664,0.08208357679239978
+88,"My `collate_fn` for PyTorch is like this. I read somewhere that sorting by length helps, so I added it. Is this giving me curriculum learning?
+```python
+def my_collate_fn(batch):
+    # Sort items in the *batch* by sequence length
+    batch.sort(key=lambda x: len(x['input_ids']), reverse=True)
+    # Pad and create tensors
+    # ...
+    return padded_batch_tensors
+```",Curriculum learning and data ordering effects,junior,0.11342155009451797,0.14067278287461776,0.02725123278009979
+89,"We ran our first red-team eval, about 500 prompts, and the results were... confusing. The model's overall safety score actually went *up* compared to our old smaller eval set, but when I spot-checked, I found several clearly harmful responses that the eval classified as 'safe'. What could be going on?",Designing a red-team eval set for a new model release,junior,0.08863198458574181,0.14130434782608695,0.05267236324034513
+90,"Review this `moe_layer` config. We're using `top_k=2`.
+```python
+moe_config = {
+    'num_experts': 8,
+    'expert_capacity_factor': 1.25,
+    'top_k': 2,
+    'router_loss_weight': 0.01,
+    'router_type': 'token_choice'
+}
+```",Tradeoffs between dense vs sparse (MoE) models at a given inference budget,senior,0.17943107221006563,0.13538461538461535,-0.044046456825450275
+91,"For our new 7B parameter model fine-tuned for complex reasoning, I'm planning to evaluate it on a standard set of 100 multiple-choice questions from a public academic benchmark. Is that a good starting point?","Designing an eval suite for a new fine-tune (what to measure, contamination risks)",junior,0.11691022964509394,0.1417910447761194,0.024880815131025455
+92,"Our last training run on spot instances completed, but when we tried to load the final checkpoint, it was corrupted. The `torch.load` call failed with `OSError: [Errno 12] Cannot allocate memory` or a pickle error. We manually verified the file size on S3, and it seemed plausible. What could cause this?",Designing a training job that survives preemption/spot instance interruption,staff,0.08071748878923767,0.14046822742474918,0.059750738635511516
+93,"My pretraining loss curve looks weird. After the warmup phase, it flatlines for a long time, barely moving, before eventually starting to slowly decrease. It's not diverging, just stuck. What could be the issue?",Learning rate schedule design and warmup tuning,junior,0.0995850622406639,0.15228426395939088,0.05269920171872698
+94,"We're trying to fine-tune a Llama 1 65B model (which is MHA) and convert it to GQA (8 groups) on a custom dataset. We initialized the GQA layers by taking the first 8 MHA K/V heads and simply dropping the rest. Training started, but the loss spiked almost immediately and never recovered. We're puzzled because we kept the query heads. What went wrong?","Explaining attention mechanism variants (MHA, GQA, MQA, MLA) and tradeoffs",staff,0.15328467153284672,0.17142857142857143,0.018143899895724708
+95,"This is our config for allocating users to A/B variants in our internal experimentation platform. Anything immediately jump out? `{""experiment_name"": ""LLM_Reranker_V2"", ""traffic_split"": {""control"": 0.5, ""treatment"": 0.5}, ""allocation_unit"": ""session_id"", ""stratification_keys"": [""region"", ""device_type""], ""duration_days"": 14}`","A/B testing a model change in production (statistical power, guardrail metrics)",staff,0.08430913348946134,0.12658227848101267,0.042273144991551326
+96,"```python
+import pandas as pd
+
+def calculate_conversion_rate(df):
+    # df has columns: 'user_id', 'event_type', 'timestamp'
+    impressions = df[df['event_type'] == 'impression'].shape[0]
+    clicks = df[df['event_type'] == 'click'].shape[0]
+    return clicks / impressions if impressions > 0 else 0
+
+# Later, in A/B analysis:
+control_cr = calculate_conversion_rate(control_df)
+treatment_cr = calculate_conversion_rate(treatment_df)
+```
+This is how I'm calculating conversion rate for my A/B test for a new product recommendation system. Any issues?","A/B testing a model change in production (statistical power, guardrail metrics)",junior,0.10659898477157359,0.10215053763440861,-0.004448447137164982
+97,"We deployed an `mixtral-8x7b-instruct-v0.1` model with TGI on a cluster of A100s using sharding. Initial tests looked good, sub-second TTFT and ~80 tok/s/GPU throughput. After we ramped up traffic to ~300 concurrent requests, TTFT shot up to 5-10 seconds, and throughput dropped by 50%. What's the most likely culprit?","Model serving architecture (vLLM, TGI, llama.cpp tradeoffs)",staff,0.09190371991247266,0.11891891891891891,0.02701519900644625
+98,"Here's my PyTorch PTQ script for a simple CNN. My model is a `nn.Sequential` block.
+```python
+import torch
+import torch.nn as nn
+
+class SimpleCNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(3, 16, 3, padding=1)
+        self.bn1 = nn.BatchNorm2d(16)
+        self.relu1 = nn.ReLU()
+        self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
+        self.relu2 = nn.ReLU()
+        self.pool = nn.MaxPool2d(2)
+        self.fc = nn.Linear(32 * 16 * 16, 10) # Assuming 64x64 input
+
+    def forward(self, x):
+        x = self.relu1(self.bn1(self.conv1(x)))
+        x = self.pool(x)
+        x = self.relu2(self.conv2(x))
+        x = self.pool(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc(x)
+        return x
+
+model = SimpleCNN()
+model.eval()
+
+model.qconfig = torch.quantization.get_default_qconfig('fbgemm')
+quantized_model = torch.quantization.prepare(model)
+# ... run calibration here ...
+quantized_model = torch.quantization.convert(quantized_model)
+```
+Anything obvious I'm missing for a good PTQ?",Quantization-aware training vs post-training quantization,junior,0.09732360097323602,0.11382113821138212,0.016497537238146107
+99,"In our DDP setup, we want to save checkpoints regularly. Is it okay to just call `torch.save(model.state_dict(), f'checkpoint_{epoch}.pt')` on all ranks?","Distributed training failures (NCCL hangs, rank mismatches, gradient sync bugs)",junior,0.1587982832618026,0.17094017094017094,0.012141887678368352
+100,"I'm experimenting with a custom LR schedule for an RL agent. It's a linear warmup to `1e-4` over 1000 steps, then holds `1e-4` constant for the remaining 50k steps. Does this make sense?",Learning rate schedule design and warmup tuning,staff,0.10833333333333332,0.19742489270386265,0.08909155937052933
+101,"For a large-scale pre-training of a 20B encoder-decoder model, assuming I have enough compute, is there any reason to *not* use Sophia? The promise of fewer steps is attractive.",Choosing optimizers (AdamW vs Lion vs Sophia) and when it matters,staff,0.12213740458015267,0.14634146341463417,0.0242040588344815
+102,"What's the right balance between broad red-team coverage and deep, targeted adversarial attacks for a new model?",Designing a red-team eval set for a new model release,staff,0.10483870967741936,0.17355371900826444,0.06871500933084508
+103,"We've been using PPO for our LLM summarization task, and while it's stable, the generated summaries occasionally drift into repetitive phrases or overly generic statements. This usually happens after about 50k steps. What's the most common cause for this in PPO?",GRPO vs PPO tradeoffs for LLM fine-tuning,staff,0.127208480565371,0.1523809523809524,0.025172471815581382
+104,"I'm planning to enable `torch.compile` for my next training run, but I want to resume from a checkpoint generated by an *uncompiled* run. Are there any major pitfalls I should watch out for besides potential performance regressions?","Checkpoint resume bugs (optimizer state mismatch, torch.compile state_dict prefix issues, LR schedule discontinuity)",senior,0.12446351931330472,0.1456582633053221,0.021194743992017387
+105,"Given a 10 TFLOPs/s inference budget, when does an 8x7B MoE model actually beat a dense 70B model in practical, P99 latency for single-token generation on an A100?",Tradeoffs between dense vs sparse (MoE) models at a given inference budget,senior,0.13930348258706468,0.1414141414141414,0.002110658827076728
+106,"We're fine-tuning Llama-2-7B on a proprietary dataset. The loss curve looks generally fine, but every 500-1000 steps, we see a sharp, brief spike in loss before it recovers. This happens consistently across multiple runs. What's the most likely culprit here, and what should I check first?","Diagnosing training instability (loss spikes, gradient norm explosions, dead neurons)",senior,0.09051724137931033,0.12738853503184713,0.0368712936525368
+107,"I'm trying to serve Llama 2 70B with vLLM on an A100 80GB, but I keep getting `RuntimeError: CUDA out of memory. Tried to allocate X GiB (GPU 0; Y GiB total capacity; Z GiB already allocated; W GiB free; P GiB reserved in total by PyTorch)` during startup. I'm using `tensor_parallel_size=1`. What gives?","Model serving architecture (vLLM, TGI, llama.cpp tradeoffs)",junior,0.13991769547325103,0.18050541516245486,0.04058771968920383
+108,"Reviewing this `Dockerfile` for our training environment. Goal is reproducibility. Any issues here?
+```dockerfile
+FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+ENTRYPOINT [""python"", ""train.py""]
+```",Versioning and reproducibility for ML experiments,senior,0.14675052410901468,0.1857142857142857,0.03896376160527101
+109,"My PPO training run with `trl.PPOTrainer` on a Llama-2-7B model keeps hitting `NaN`s in the policy loss after about 10k steps. I'm using `bfloat16` and the default AdamW optimizer. `ppo_config.clip_range` is 0.2, `ppo_config.target_kl` is 0.01. What's usually the cause?",GRPO vs PPO tradeoffs for LLM fine-tuning,junior,0.1115702479338843,0.19377162629757785,0.08220137836369355
+110,Our new model improved MAE on Dataset X by 10% over the reported SOTA. We used a slightly different train/test split because the original paper's split script was broken. Is this fine?,"Reading a paper's results table skeptically (cherry-picked baselines, missing error bars, unfair comparisons)",senior,0.15555555555555556,0.21495327102803738,0.05939771547248182
+111,"Is it feasible to use PPO for LLM fine-tuning without an explicit, separately trained reward model, if I only have human preference data (chosen/rejected pairs) like DPO uses?",GRPO vs PPO tradeoffs for LLM fine-tuning,senior,0.1257606490872211,0.1940928270042194,0.0683321779169983
+112,"We're planning to pretrain a Mamba on our internal code corpus (mix of Python, Java, C++). Is there anything special we need to consider about the dataset or tokenization compared to pretraining a Transformer for code?",State space models / Mamba vs transformer tradeoffs,junior,0.0823045267489712,0.11447811447811448,0.03217358772914329
+113,Seeing this warning: `UserWarning: Detected inf or NaN gradient values. Clipping to max_norm: 1.0` followed by loss eventually going NaN. Using `torch.cuda.amp.autocast()` and `GradScaler`. Any ideas?,"Debugging NaN/Inf losses in PyTorch training (overflow, bad LR, exploding grads, mixed precision pitfalls)",staff,0.10454545454545455,0.14465408805031446,0.04010863350485991
+114,"We trained a custom Vision Transformer on a new dataset. FP32 converged fine, but when we switched to FP16 (with AMP and dynamic loss scaling), it diverged after 10 epochs. Model architecture is standard. What should I check first?","Mixed precision training pitfalls (fp16 vs bf16, loss scaling, gradient underflow)",staff,0.0935064935064935,0.13953488372093023,0.046028390214436735
+115,"When resuming a training run after preemption, should I always load the `scheduler.state_dict()` as is, or are there cases where I should adjust the learning rate explicitly?",Designing a training job that survives preemption/spot instance interruption,senior,0.12322274881516587,0.17142857142857143,0.04820582261340556
+116,"We're trying to fine-tune a Llama 3 8B model for text generation on a specific domain dataset (about 500k examples). We're currently using `AdamW` and it's converging well, but quite slowly. Our initial thought was to switch to `SophiaG` for faster convergence. Is this a sound plan?",Choosing optimizers (AdamW vs Lion vs Sophia) and when it matters,senior,0.11306042884990253,0.1310043668122271,0.017943937962324574
+117,We've developed a new `GatedTransformerBlock` that combines our novel gating mechanism with standard multi-head attention and an FFN. Our experiments show a 1.2 BLEU improvement on a machine translation task compared to a vanilla Transformer block. What's the most critical ablation we're probably missing here?,Critiquing a novel architecture proposal for missing ablations or confounds,senior,0.091324200913242,0.17525773195876287,0.08393353104552087
+118,"Our training jobs on a shared cluster show highly variable throughput. Sometimes it's great, other times it crawls. It's DDP on 8 GPUs. We suspect something external.","Diagnosing why a multi-GPU job is slower than expected (profiling, bottleneck ID)",senior,0.09271523178807947,0.10294117647058824,0.010225944682508772
+119,I'm getting `ptxas fatal : Unresolved extern function '_Z...` when I try to compile my custom CUDA kernel (`.cu` file) within my PyTorch C++/CUDA extension. What does this mean?,Custom CUDA kernel debugging basics and when you actually need one,junior,0.15384615384615385,0.16045845272206302,0.006612298875909167
+120,"For our real-time recommendation model, we're setting a guardrail that p99 inference latency should not exceed 50ms in the A/B test. Good enough?","A/B testing a model change in production (statistical power, guardrail metrics)",staff,0.11489361702127658,0.13392857142857142,0.019034954407294843
+121,"We just fine-tuned our Llama-7B on a new 100k instruction set. Validation loss looked okay, but our internal eval on creative writing tasks completely tanked. Factual Q&A improved slightly. We ran all our standard dedup and quality filters.","Data curation for instruction tuning (dedup, quality filtering, diversity)",staff,0.13537117903930132,0.1342281879194631,-0.0011429911198382325
+122,"My `nvidia-smi` shows ~70GB used out of 80GB, but my PyTorch OOM message says `reserved in total by PyTorch` is 75GB. The PyTorch profiler and `torch.cuda.memory_summary()` show peak usage around 60GB. What's the discrepancy here? The OOM is definitely happening during forward pass.","GPU memory debugging (OOM diagnosis, activation checkpointing tradeoffs, memory fragmentation)",staff,0.12955465587044535,0.11764705882352941,-0.011907597046915935
+123,"Our 4x A6000 DDP training job starts fast for the first 100-200 steps, then performance drops significantly (epoch time increases by 3-4x). GPU utilization reported by `nvidia-smi` also drops from 95% to around 50-60%. We're loading data from S3 using `webdataset`.","Diagnosing why a multi-GPU job is slower than expected (profiling, bottleneck ID)",staff,0.0956521739130435,0.11046511627906976,0.01481294236602626
+124,Getting `NCCL_NETWORK_ABORT: nccl_all_reduce_cuda: failed to connect to peer` during distributed training start-up on AWS P4d instances. All security groups are open. What's wrong?,"Choosing GPU hardware for a training job (VRAM math, interconnect bandwidth, cost-per-token)",senior,0.09852216748768473,0.09876543209876543,0.00024326461108069297
+125,"What does it mean if both my training and validation loss curves are mostly flat and stuck around, say, 2.0, even after 50 epochs?",Overfitting vs underfitting diagnosis from loss curves alone,junior,0.12616822429906543,0.20994475138121546,0.08377652708215003
+126,Why does pre-LN tend to make training deeper transformers more stable compared to post-LN?,Explaining why layer norm placement (pre-LN vs post-LN) affects training stability,staff,0.14145383104125736,0.20973782771535582,0.06828399667409846
+127,"We're planning to use a static, manually curated eval set of 500 prompts for all future fine-tunes.","Designing an eval suite for a new fine-tune (what to measure, contamination risks)",staff,0.1347708894878706,0.1523809523809524,0.017610062893081785
+128,"```
+(train_script.py:123) MambaLayer: input_ids shape torch.Size([1, 128, 768])
+(train_script.py:124) MambaLayer: hidden_states shape torch.Size([1, 128, 768])
+...
+loss: nan
+...
+```",State space models / Mamba vs transformer tradeoffs,senior,0.08714596949891067,0.14102564102564102,0.05387967152673036
+129,"We deployed a new model that was fine-tuned on a custom dataset. Training metrics looked great, but in production, it's performing significantly worse than expected, almost like it's randomly guessing. We used standard Kaiming init. Any ideas?",Weight initialization schemes and why they matter at scale,senior,0.11029411764705883,0.13533834586466167,0.02504422821760284
+130,Why do I always hear about needing 'strong baselines' for new architecture papers? I thought showing SOTA performance was enough.,Critiquing a novel architecture proposal for missing ablations or confounds,junior,0.11409395973154361,0.1408450704225352,0.026751110690991578
+131,"I'm trying to implement gradient accumulation manually. Does this look right?
+```python
+for i, batch in enumerate(dataloader):
+    outputs = model(**batch)
+    loss = outputs.loss / gradient_accumulation_steps # Scale loss
+    loss.backward()
+    if (i + 1) % gradient_accumulation_steps == 0:
+        optimizer.step()
+        optimizer.zero_grad()
+```",Batch size / gradient accumulation tradeoffs and effective batch size math,junior,0.12826603325415678,0.24096385542168675,0.11269782216752997
+132,"We trained an RL agent to navigate a complex 3D environment to find a specific object. During training, the agent's path length metric decreased significantly, and it started 'finding' the object almost instantly. But during human evaluation, users reported that the object was nowhere to be seen on screen; the agent was just standing still.",Reward hacking diagnosis and mitigation,staff,0.13805970149253732,0.1797752808988764,0.041715579406339076
+133,"We're implementing a prompt routing layer for our customer service chatbot. The idea is to send simple FAQs to a small, fine-tuned `bert-base-uncased` classifier, and complex queries to `gpt-3.5-turbo`. The issue is, sometimes the classifier misroutes, sending a simple question to GPT-3.5 and increasing costs unnecessarily. How would you harden this decision logic?",Cost/latency tradeoffs in model selection for a product feature,staff,0.1398305084745763,0.21359223300970878,0.0737617245351325
+134,"To be safe, I'm planning to use 10,000 samples from our full production data stream for PTQ calibration of a LLaMA model. This should give the quantizer plenty of examples to get accurate ranges, right?",Calibration dataset choice for post-training quantization,junior,0.12217194570135746,0.14342629482071714,0.02125434911935968
+135,"I'm using gradient accumulation with DDP. I want to accumulate for `N` steps, then update. Here's my loop, but it seems to be hanging after the first few accumulation steps:
+
+```python
+for step, batch in enumerate(dataloader):
+    with model.no_sync() if (step + 1) % gradient_accumulation_steps != 0 else nullcontext():
+        output = model(batch)
+        loss = criterion(output, labels)
+        loss.backward()
+
+    if (step + 1) % gradient_accumulation_steps == 0:
+        optimizer.step()
+        optimizer.zero_grad()
+```
+What's wrong here?","Distributed training failures (NCCL hangs, rank mismatches, gradient sync bugs)",staff,0.2669245647969053,0.25,-0.016924564796905295
+136,"My `torch.compile` model randomly crashes with `CUDA error: device-side assert triggered` during fine-tuning, but only after a few hundred steps. Running without `compile` works fine. The stack trace points deep into an `inductor` generated kernel. No `dynamo` graph breaks are reported.",torch.compile graph breaks and how to diagnose/fix them,staff,0.12524461839530332,0.14054054054054058,0.015295922145237256
+137,"Getting `CUDA out of memory. Tried to allocate X GiB (total Y GiB) while already using Z GiB` during generation on a Llama-2-7B-chat model. Batch size 1, sequence length 2048. Is this just VRAM? We're using MHA.","Explaining attention mechanism variants (MHA, GQA, MQA, MLA) and tradeoffs",senior,0.12260536398467432,0.19528619528619526,0.07268083130152093
+138,"I'm trying to optimize a transformer model with MHA. I've profiled it and the bottleneck is definitely the memory bandwidth for KV cache access during inference. I want to try GQA. My current MHA has `num_heads=16`. What should be my starting `num_kv_heads` for GQA, and how do I decide on the optimal value?","Explaining attention mechanism variants (MHA, GQA, MQA, MLA) and tradeoffs",junior,0.16835016835016836,0.16393442622950818,-0.004415742120660177
+139,We're trying to optimize the throughput for both policy generation and reward model inference during PPO. What are the best practices for batching requests given varying sequence lengths?,"RLHF pipeline design (reward model, PPO, KL penalty tuning)",senior,0.09312638580931264,0.0995475113122172,0.006421125502904565
+140,"We adapted a Transformer model to use ALiBi. Fine-tuned it on 8k sequences, then tried inference on 32k. Latency increased, but quality (perplexity, ROUGE scores) didn't improve compared to the 8k baseline, sometimes even got worse. What's the common pitfall here?","Positional encoding schemes (RoPE, ALiBi, learned) and extrapolation behavior",staff,0.13061224489795917,0.14603174603174604,0.015419501133786873
+141,"Hey, I'm trying to run a training job on a remote server. When I close my SSH connection, the job dies. How do I make it keep running?","Setting up a remote training job correctly (daemonization, logging, checkpoint cadence)",junior,0.1772853185595568,0.15165876777251183,-0.025626550787044955
+142,"We shipped a DPO-tuned model and it got slammed in A/B tests. Users are reporting it's too 'safe', 'boring', and 'generic'. Our preference dataset was collected by asking annotators to pick the 'more helpful and harmless' response. We used `beta=0.1` during DPO training.",DPO/IPO preference optimization pitfalls,staff,0.10196078431372549,0.2059800664451827,0.10401928213145722
+143,"I'm trying to add the auxiliary loss to my MoE implementation. Does this look like a correct way to compute it based on the router outputs?
+```python
+def calculate_aux_loss(router_logits, top_k_indices):
+    # router_logits: (batch_size, seq_len, num_experts)
+    # top_k_indices: (batch_size, seq_len, top_k)
+    num_experts = router_logits.shape[-1]
+    tokens_per_expert = torch.zeros(num_experts, device=router_logits.device)
+    for i in range(num_experts):
+        tokens_per_expert[i] = (top_k_indices == i).sum()
+
+    # Scale by batch_size * seq_len
+    load_loss = tokens_per_expert.var() / (router_logits.shape[0] * router_logits.shape[1])
+    return load_loss
+```",Mixture-of-Experts routing design choices and load balancing,junior,0.1452991452991453,0.1513157894736842,0.006016644174538899
+144,"When should I actually consider writing a custom CUDA kernel instead of just using `torch.bmm`, `einsum`, or `F.scaled_dot_product_attention`?",Custom CUDA kernel debugging basics and when you actually need one,staff,0.105515587529976,0.10970464135021098,0.004189053820234975
+145,"To encourage our internal red-teamers, we're thinking of a leaderboard for who finds the most critical safety violations each month, with bonuses for the top 3.",Designing a red-team eval set for a new model release,senior,0.09333333333333334,0.13541666666666666,0.04208333333333332
+146,"We have a custom C++ serving framework that loads PyTorch models. How should we ensure that deployed models retain their experiment metadata (like run ID, Git commit, metrics) for auditing and debugging, since our serving layer isn't Python/MLflow native?",Versioning and reproducibility for ML experiments,staff,0.14410480349344978,0.1076923076923077,-0.036412495801142086
+147,"We switched from a constant LR to a cosine annealing scheduler with warm-up. Now, after the warm-up phase ends, `loss` immediately shoots to `inf`. It was fine with constant LR.","Debugging NaN/Inf losses in PyTorch training (overflow, bad LR, exploding grads, mixed precision pitfalls)",senior,0.10547667342799188,0.16176470588235295,0.056288032454361064
+148,"I'm setting up a `auto_gptq` script to quantize a custom 13B model I fine-tuned. Here's how I'm initializing `GPTQConfig`. Does this look right for 4-bit, group size 128? I want good quality.","Quantization tradeoffs (GGUF Q4/Q5/Q8, GPTQ, AWQ) and when to use each",junior,0.08983451536643025,0.07766990291262135,-0.012164612453808898
+149,"Our new summarization service using `bart-large-cnn` is exhibiting high latency spikes, sometimes hitting 2-3 seconds for a 500-word input, even on A10G GPUs. Batch size is 1. We're using `transformers.pipeline` with `torch_dtype=torch.float16`. Any thoughts?",Cost/latency tradeoffs in model selection for a product feature,senior,0.13526570048309178,0.1698841698841699,0.03461846940107813
+150,"In my RL agent, I'm using a composite reward: `reward = 0.7 * rm_score + 0.3 * length_penalty`. Any issues here?",Reward hacking diagnosis and mitigation,senior,0.11378555798687089,0.16535433070866143,0.05156877272179054
+151,I'm running a distributed SFT job with DeepSpeed Zero-3 on Llama-3-70B on 8xA100s. I keep hitting an OOM error that looks like this: `deepspeed.runtime.zero.partition_parameters.ZeroParamStatus.OPTIMIZER_STATE_OOM` and then in the stack trace I see a line `self.kv_cache.to(self.device)` just before the crash. What's wrong?,KV cache memory math and context length scaling,senior,0.15953307392996108,0.18181818181818185,0.022285107888220773
+152,"I'm trying to profile my DDP job to find bottlenecks. I just added `torch.profiler.profile` to wrap my entire training loop for 20 epochs. After running, the output file is huge and I can't make sense of it. What's the best way to use this tool?","Diagnosing why a multi-GPU job is slower than expected (profiling, bottleneck ID)",junior,0.11428571428571428,0.12063492063492064,0.006349206349206354
+153,"I'm running a custom training loop in PyTorch, trying to use a simple early stopping. What do you think?
+```python
+best_val_loss = float('inf')
+patience = 5
+epochs_no_improve = 0
+for epoch in range(num_epochs):
+    # training steps
+    train_loss = train_one_epoch()
+
+    # validation steps
+    val_loss = validate_one_epoch()
+
+    if val_loss < best_val_loss:
+        best_val_loss = val_loss
+        epochs_no_improve = 0
+        torch.save(model.state_dict(), 'best_model.pt')
+    else:
+        epochs_no_improve += 1
+        if epochs_no_improve >= patience:
+            print(""Early stopping!"")
+            break
+    print(f""Epoch {epoch}: Train Loss = {train_loss:.4f}, Val Loss = {val_loss:.4f}"")
+```",Overfitting vs underfitting diagnosis from loss curves alone,senior,0.13138686131386862,0.15584415584415584,0.02445729453028722
+154,"Here's how I'm resuming from a checkpoint. Does this look robust? ```python
+checkpoint = torch.load('latest.pt')
+model.load_state_dict(checkpoint['model_state_dict'])
+optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+epoch = checkpoint['epoch']
+step = checkpoint['step']
+```","Setting up a remote training job correctly (daemonization, logging, checkpoint cadence)",staff,0.13151927437641722,0.1927710843373494,0.061251809960932185
+155,"We're building an MoE for a long-sequence code generation task. For routing, I'm thinking of a simple hash-based router using a hash of the token's AST node type, mapping to an expert. This would group similar code constructs to specific experts. Thoughts?",Mixture-of-Experts routing design choices and load balancing,staff,0.1174089068825911,0.13385826771653542,0.016449360833944313
+156,"Our recently trained 50B parameter model, which used a 4k context window during pre-training, is showing really poor performance on tasks requiring context beyond ~512 tokens. Even simple key-value retrieval fails for prompts longer than 1k. What's the likely culprit? We followed standard scaling practices for parameters and tokens.",Explaining scaling laws and what they do/don't predict,staff,0.12547528517110268,0.13054830287206265,0.00507301770095997
+157,"We have two GPUs, A100 and V100. The model trains fine on the A100, but consistently gets NaN loss after a few hundred steps on the V100, even with the exact same code and seed. What gives?","Debugging NaN/Inf losses in PyTorch training (overflow, bad LR, exploding grads, mixed precision pitfalls)",junior,0.09072978303747535,0.09933774834437085,0.008607965306895504
+158,We're considering QAT for a 7B LLM to hit a tight latency target on a custom accelerator. The FP16 baseline finetuning takes 3 days on 8x A100s. I'm worried QAT will double that or be unstable. Is it even feasible?,Quantization-aware training vs post-training quantization,staff,0.11016949152542374,0.1557377049180328,0.04556821339260905
+159,"My new `ContextualEmbeddingLayer` is supposed to capture local context better than standard token embeddings. Unit tests pass, and it adds only minimal parameters. But when I replace the base embedding layer in my BERT-style model and fine-tune on GLUE, I see no improvement, sometimes even a slight drop. The theory is sound, what am I missing in practice?",Critiquing a novel architecture proposal for missing ablations or confounds,junior,0.125,0.1360544217687075,0.011054421768707495
+160,"```python
+# ...
+model = MyLlamaModel.from_pretrained(""llama-7b-hf"")
+# No model.eval() here
+
+qconfig = torch.quantization.get_default_qconfig(""fbgemm"")
+model_prepared = torch.quantization.fuse_modules(model, ...) # Fusing
+model_prepared.qconfig = qconfig
+
+# Calibration loop
+for batch in calibration_data:
+    # ... forward pass ...
+
+model_quantized = torch.quantization.convert(model_prepared)
+```
+This is a simplified snippet of my PTQ flow. Anything obvious I'm missing related to calibration?",Calibration dataset choice for post-training quantization,senior,0.10377358490566038,0.1642512077294686,0.060477622823808225
