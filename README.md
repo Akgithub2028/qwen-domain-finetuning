@@ -1,117 +1,142 @@
-# Qwen2.5-1.5B QLoRA Fine-Tuning & Evaluation
+# 🚀 Qwen2.5-1.5B QLoRA Fine-Tuning & Evaluation
 
-A practical experiment on fine-tuning **Qwen2.5-1.5B** using **QLoRA** and evaluating whether the fine-tuned model actually performs better than the original base model on a custom instruction dataset.
+<p align="center">
+  <img src="https://img.shields.io/badge/Model-Qwen2.5--1.5B-blue?style=flat-square" alt="Model">
+  <img src="https://img.shields.io/badge/Method-QLoRA-orange?style=flat-square" alt="Method">
+  <img src="https://img.shields.io/badge/Framework-PyTorch-red?style=flat-square" alt="Framework">
+  <img src="https://img.shields.io/badge/Metric-ROUGE--L-green?style=flat-square" alt="Metric">
+  <img src="https://img.shields.io/badge/Platform-Google%20Colab-yellow?style=flat-square" alt="Platform">
+</p>
 
-The project focuses not only on fine-tuning, but also on **quantitative evaluation, comparison, topic-level analysis, difficulty-level analysis, and regression analysis**.
+<p align="center">
+  A practical, end-to-end experiment fine-tuning <strong>Qwen2.5-1.5B</strong> with <strong>QLoRA</strong> — and rigorously testing whether it actually performs better than the base model, rather than assuming it does.
+</p>
+
+---
+
+## 📑 Table of Contents
+
+- [Objective](#-objective)
+- [Model & Fine-Tuning](#-model--fine-tuning)
+- [Project Workflow](#-project-workflow)
+- [Evaluation Method](#-evaluation-method)
+- [Results](#-results)
+- [Error & Regression Analysis](#-error--regression-analysis)
+- [Repository Structure](#-repository-structure)
+- [Notebook](#-notebook)
+- [Reproducibility](#-reproducibility)
+- [Model Weights](#️-model-weights)
+- [Author](#-author)
 
 ---
 
 ## 🎯 Objective
 
-The main objective of this project was to investigate:
+The central question driving this project:
 
-> **Does parameter-efficient fine-tuning improve the performance of a small language model on a task-specific dataset?**
+> **Does parameter-efficient fine-tuning actually improve the performance of a small language model on a task-specific dataset — or is the improvement assumed rather than proven?**
 
-Instead of evaluating only the fine-tuned model, the project compares it against the **original base model** using the same evaluation examples.
+Rather than evaluating the fine-tuned model in isolation, this project runs a **controlled, side-by-side comparison** against the original base model on identical evaluation examples, then digs into *where* and *why* performance changed using topic-level, difficulty-level, and regression analysis.
 
 ---
 
 ## 🧠 Model & Fine-Tuning
 
-**Base Model:** Qwen2.5-1.5B
+| | |
+|---|---|
+| **Base Model** | Qwen2.5-1.5B |
+| **Fine-Tuning Method** | QLoRA (Quantized Low-Rank Adaptation) |
+| **Evaluation Metric** | ROUGE-L |
 
-**Fine-Tuning Method:** QLoRA
+QLoRA enables parameter-efficient fine-tuning by keeping the base model quantized (4-bit) while training lightweight, low-rank adapter layers on top — dramatically reducing memory and compute requirements without sacrificing the quality of task adaptation.
 
-QLoRA enables parameter-efficient fine-tuning by keeping the base model quantized while training lightweight adapter parameters.
+### 🛠️ Technologies Used
 
-### Technologies Used
-
-- Python
-- PyTorch
-- Hugging Face Transformers
-- Hugging Face Datasets
-- PEFT
-- QLoRA
-- BitsAndBytes
-- TRL
-- ROUGE-L
-- Google Colab
+<p>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white">
+  <img src="https://img.shields.io/badge/🤗%20Transformers-yellow?style=flat-square">
+  <img src="https://img.shields.io/badge/🤗%20Datasets-yellow?style=flat-square">
+  <img src="https://img.shields.io/badge/PEFT-lightgrey?style=flat-square">
+  <img src="https://img.shields.io/badge/BitsAndBytes-purple?style=flat-square">
+  <img src="https://img.shields.io/badge/TRL-teal?style=flat-square">
+  <img src="https://img.shields.io/badge/Google%20Colab-F9AB00?style=flat-square&logo=googlecolab&logoColor=white">
+</p>
 
 ---
 
 ## 🔄 Project Workflow
 
+```mermaid
+flowchart TD
+    A[Custom Dataset] --> B[Data Preparation]
+    B --> C[Train / Validation / Test Split]
+    C --> D[Base Qwen2.5-1.5B]
+    D --> E[QLoRA Fine-Tuning]
+    E --> F[Fine-Tuned Model]
+    F --> G[Generate Predictions]
+    G --> H[Evaluate Base Model]
+    G --> I[Evaluate Fine-Tuned Model]
+    H --> J[Compare Performance]
+    I --> J
+    J --> K[Topic & Difficulty Analysis]
+    K --> L[Regression Analysis]
+```
+
+---
+
+## 📊 Evaluation Method
+
+The base model and the fine-tuned model were evaluated on the **exact same held-out examples**, ensuring a fair, apples-to-apples comparison. The evaluation pipeline produces:
+
+- ✅ Baseline predictions
+- ✅ Fine-tuned predictions
+- ✅ ROUGE-L scores per example
+- ✅ Per-example improvement deltas
+- ✅ Topic-wise performance breakdown
+- ✅ Difficulty-wise performance breakdown
+- ✅ Regression analysis (where fine-tuning *hurt* performance)
+
+The goal was to **prove** measurable improvement with data — not simply assume that fine-tuning helps.
+
+---
+
+## 📈 Results
+
+### 1️⃣ Baseline vs Fine-Tuned Performance by Difficulty
+
+The chart below compares ROUGE-L scores between the baseline and fine-tuned model across three difficulty tiers — **Junior**, **Senior**, and **Staff** — offering a direct view of how fine-tuning affects performance as task complexity increases.
+
+![Baseline vs Fine-Tuned Performance by Difficulty](results/plots/performance_by_difficulty.png)
+
+**Key takeaway:** the fine-tuned model outperforms the baseline consistently across *all* difficulty levels, with the largest relative gains appearing at the **Staff** level — suggesting fine-tuning helps most on the hardest, most nuanced examples.
+
+### 2️⃣ Top 10 Topics Improved by Fine-Tuning
+
+This chart ranks the topics with the **largest relative ROUGE-L improvement** after fine-tuning, highlighting exactly where the training data had the greatest impact.
+
+![Top 10 Topics Improved by Fine-Tuning](results/plots/top_10_topics_improvement.png)
+
+**Key takeaway:** the strongest gains cluster around **ML systems and training-engineering topics** — batch size / gradient accumulation tradeoffs, fault-tolerant training design, learning-rate scheduling, and preference-optimization pitfalls (DPO/IPO) — indicating the fine-tuning dataset was especially effective at teaching deep, applied LLM-training knowledge.
+
+---
+
+## 🔍 Error & Regression Analysis
+
+Fine-tuning does not uniformly improve every example — and pretending otherwise would make for a dishonest evaluation. To keep this analysis grounded in reality, examples where the **fine-tuned model underperformed the baseline** were specifically isolated and studied.
+
+This regression analysis:
+- Surfaces cases where fine-tuning introduced *new* errors
+- Helps distinguish genuine skill improvement from overfitting to certain patterns
+- Provides a more realistic, trustworthy picture of what the fine-tuning process actually achieved
+
+📁 Full evaluation and comparison files are available in the [`results/`](results/) directory.
+
+---
+
+## 📁 Repository Structure
+
 ```text
-Custom Dataset
-      ↓
-Data Preparation
-      ↓
-Train / Validation / Test Split
-      ↓
-Base Qwen2.5-1.5B
-      ↓
-QLoRA Fine-Tuning
-      ↓
-Fine-Tuned Model
-      ↓
-Generate Predictions
-      ↓
-Evaluate Base Model
-      ↓
-Evaluate Fine-Tuned Model
-      ↓
-Compare Performance
-      ↓
-Topic & Difficulty Analysis
-      ↓
-Regression Analysis
-
-
-📊 Evaluation Method
-
-The base model and fine-tuned model were evaluated on the same evaluation examples.
-
-The comparison includes:
-
-Baseline predictions
-Fine-tuned predictions
-ROUGE-L scores
-Per-example improvement
-Topic-wise performance
-Difficulty-wise performance
-Regression analysis
-
-The purpose of the evaluation was to determine whether fine-tuning produced measurable improvement rather than assuming that fine-tuning automatically improves performance.
-
-
-📈 Results
-Performance by Difficulty
-
-The following visualization compares the performance of the baseline model and fine-tuned model across different difficulty levels.
-
-This provides a direct view of how fine-tuning affected model performance across different levels of task difficulty.
-
-
-Top 10 Topics Improved by Fine-Tuning
-
-The following visualization shows the topics with the largest improvement after fine-tuning.
-
-This helps identify the areas where the fine-tuned model benefited most from the training data.
-
-
-🔍 Error & Regression Analysis
-
-Fine-tuning does not necessarily improve every individual example.
-
-Therefore, examples where the fine-tuned model performed worse than the baseline were separately identified and analyzed.
-
-This provides a more realistic evaluation of the fine-tuning process and helps identify cases where fine-tuning introduced regressions.
-
-Detailed evaluation and comparison files are available in the results/ directory.
-
-
-📁 Repository Structure
-
 LLM-FineTuning-Project/
 │
 ├── data/
@@ -143,123 +168,72 @@ LLM-FineTuning-Project/
 │   └── README.md
 │
 └── README.md
+```
 
+---
 
+## 📓 Notebook
 
-📓 Notebook
+The complete experimental workflow lives in:
 
-The complete experimental workflow is available in:
+📔 [`notebook/fine_tuning.ipynb`](notebook/fine_tuning.ipynb)
 
-notebook/fine_tuning.ipynb
+It walks through:
 
-The notebook contains:
+1. Dataset preparation
+2. Data splitting (train / validation / test)
+3. Model setup
+4. QLoRA configuration
+5. Fine-tuning
+6. Baseline evaluation
+7. Fine-tuned model evaluation
+8. Quantitative comparison
+9. Topic analysis
+10. Difficulty analysis
+11. Regression analysis
 
-Dataset preparation
-Data splitting
-Model setup
-QLoRA configuration
-Fine-tuning
-Baseline evaluation
-Fine-tuned model evaluation
-Quantitative comparison
-Topic analysis
-Difficulty analysis
-Regression analysis
+---
 
+## 📂 Results Directory
 
+The [`results/`](results/) directory contains every generated evaluation output used to compare the base and fine-tuned models:
 
-📂 Results
+- Model predictions (baseline & fine-tuned)
+- Comparison metrics
+- Topic-level analysis
+- Difficulty-level analysis
+- Error / regression analysis
+- Qualitative evaluation examples
 
-The results/ directory contains the generated evaluation outputs used for comparing the base and fine-tuned models.
+---
 
-These include:
+## 🚀 Reproducibility
 
-Model predictions
-Comparison metrics
-Topic-level analysis
-Difficulty-level analysis
-Error analysis
-Qualitative evaluation examples
+This experiment was developed and executed on **Google Colab**. To reproduce it:
 
+1. Open the notebook in [`notebook/`](notebook/).
+2. Install the required dependencies.
+3. Prepare the dataset.
+4. Load the Qwen2.5-1.5B base model.
+5. Configure QLoRA.
+6. Run the fine-tuning process.
+7. Generate baseline and fine-tuned predictions.
+8. Run the evaluation and analysis sections.
 
-## 📊 Graphs
+---
 
-### 1. Baseline vs Fine-Tuned Performance by Difficulty
+## ⚠️ Model Weights
 
-![Baseline vs Fine-Tuned Performance by Difficulty](results/plots/performance_by_difficulty.png)
+The trained model weights are **not included** in this repository due to their large size. The notebook contains the complete workflow needed to reproduce fine-tuning from scratch.
 
-### 2. Top 10 Topics Improved by Fine-Tuning
+---
 
-![Top 10 Topics Improved by Fine-Tuning](results/plots/top_10_topics_improvement.png)
+## 👨‍💻 Author
 
+**Aayaann Kausar**
 
+---
 
-⚠️ Model Weights
-
-The trained model weights are not included in this repository because of their large size.
-
-The notebook contains the workflow used to fine-tune the model.
-
-
-
-🚀 Reproducibility
-
-The experiment was developed and executed using Google Colab.
-
-To reproduce the workflow:
-
-Open the notebook in notebook/.
-Install the required dependencies.
-Prepare the dataset.
-Load the Qwen2.5-1.5B base model.
-Configure QLoRA.
-Run the fine-tuning process.
-Generate baseline and fine-tuned predictions.
-Run the evaluation and analysis sections.
-
-
-
-👨‍💻 Author
-
-Aayaann Kausar
-
-
-## Step 3 — Where the graphs appear
-
-This is the important part.
-
-Your GitHub README will visually look like:
-
-```text
-PROJECT TITLE
-       ↓
-OBJECTIVE
-       ↓
-MODEL & TECHNOLOGY
-       ↓
-PROJECT WORKFLOW
-       ↓
-EVALUATION METHOD
-       ↓
-━━━━━━━━━━━━━━━━━━━━
-       RESULTS
-━━━━━━━━━━━━━━━━━━━━
-
-Performance by Difficulty
-
-       [YOUR GRAPH 1]
-       
-Top 10 Topics Improved
-
-       [YOUR GRAPH 2]
-
-       ↓
-ERROR & REGRESSION ANALYSIS
-       ↓
-REPOSITORY STRUCTURE
-       ↓
-NOTEBOOK
-       ↓
-REPRODUCIBILITY
-       ↓
-AUTHOR
+<p align="center">
+  <sub>If you found this project useful, consider ⭐ starring the repository!</sub>
+</p>
