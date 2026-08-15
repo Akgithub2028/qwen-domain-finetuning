@@ -1,1 +1,3 @@
 
+model,num_test_examples,rouge1,rouge2,rougeL,bertscore_f1
+Qwen2.5-1.5B-Instruct-QLoRA,161,0.3239271677994099,0.06006963426198367,0.14934253815906987,0.8497241365243189
