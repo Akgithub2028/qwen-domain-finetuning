@@ -1,1 +1,89 @@
 
+index,instruction,topic,difficulty,baseline_rougeL,finetuned_rougeL,improvement
+141,"Hey, I'm trying to run a training job on a remote server. When I close my SSH connection, the job dies. How do I make it keep running?","Setting up a remote training job correctly (daemonization, logging, checkpoint cadence)",junior,0.1772853185595568,0.1516587677725118,-0.0256265507870449
+70,"To evaluate our new medical chatbot, we're planning to use a subset of questions from MedQA and USMLE, translated into conversational turns. Our training data is a mix of medical textbooks and transcribed doctor-patient dialogues. We think this will give us a good measure of its clinical reasoning.","Dataset contamination detection (train/test overlap, benchmark leakage)",junior,0.1168831168831168,0.0941176470588235,-0.0227654698242933
+148,"I'm setting up a `auto_gptq` script to quantize a custom 13B model I fine-tuned. Here's how I'm initializing `GPTQConfig`. Does this look right for 4-bit, group size 128? I want good quality.","Quantization tradeoffs (GGUF Q4/Q5/Q8, GPTQ, AWQ) and when to use each",junior,0.0898345153664302,0.0776699029126213,-0.0121646124538088
+35,"What's a good starting value for `init_scale` in `torch.cuda.amp.GradScaler`? I'm using a batch size of 256, a standard AdamW optimizer, and fine-tuning a BERT-sized model.","Mixed precision training pitfalls (fp16 vs bf16, loss scaling, gradient underflow)",junior,0.1382113821138211,0.1274509803921568,-0.0107604017216642
+81,"Hey, I'm seeing a lot of recent Transformer models use 'Pre-LN' and older ones use 'Post-LN'. What's the actual difference and why does it matter for training stability?",Explaining why layer norm placement (pre-LN vs post-LN) affects training stability,junior,0.1473684210526316,0.1424148606811145,-0.004953560371517
+26,Does reward shaping make reward hacking worse or better? I'm trying to guide my agent faster.,Reward hacking diagnosis and mitigation,junior,0.1874999999999999,0.2702702702702703,0.0827702702702703
+53,What are the absolute minimum pieces of state I need to save in a checkpoint to be able to resume training effectively on a preemptible instance? I'm using PyTorch.,Designing a training job that survives preemption/spot instance interruption,junior,0.1210653753026634,0.2047244094488188,0.0836590341461554
+125,"What does it mean if both my training and validation loss curves are mostly flat and stuck around, say, 2.0, even after 50 epochs?",Overfitting vs underfitting diagnosis from loss curves alone,junior,0.1261682242990654,0.2099447513812154,0.08377652708215
+77,"Hey, I keep hearing 'reward hacking' thrown around. Can you give me a concrete, technical example of what it looks like in an RL setting, not just the abstract 'agent found a loophole' stuff?",Reward hacking diagnosis and mitigation,junior,0.15,0.248,0.098
+131,"I'm trying to implement gradient accumulation manually. Does this look right?
+```python
+for i, batch in enumerate(dataloader):
+    outputs = model(**batch)
+    loss = outputs.loss / gradient_accumulation_steps # Scale loss
+    loss.backward()
+    if (i + 1) % gradient_accumulation_steps == 0:
+        optimizer.step()
+        optimizer.zero_grad()
+```",Batch size / gradient accumulation tradeoffs and effective batch size math,junior,0.1282660332541567,0.2409638554216867,0.1126978221675299
+45,"Review this `data_split.py` for potential issues. I'm using `huggingface/datasets`.
+```python
+from datasets import load_dataset
+dataset = load_dataset('my_corpus', split='train')
+train_test_split = dataset.train_test_split(test_size=0.05, seed=42)
+train_dataset = train_test_split['train']
+test_dataset = train_test_split['test']
+# Later, I'm taking a subset of 'train_dataset' for validation.
+val_dataset = train_dataset.train_test_split(test_size=0.1)['test']
+```","Dataset contamination detection (train/test overlap, benchmark leakage)",senior,0.2973977695167286,0.2045454545454545,-0.0928523149712741
+90,"Review this `moe_layer` config. We're using `top_k=2`.
+```python
+moe_config = {
+    'num_experts': 8,
+    'expert_capacity_factor': 1.25,
+    'top_k': 2,
+    'router_loss_weight': 0.01,
+    'router_type': 'token_choice'
+}
+```",Tradeoffs between dense vs sparse (MoE) models at a given inference budget,senior,0.1794310722100656,0.1353846153846153,-0.0440464568254502
+10,"I'm trying to replace a standard `torch.nn.Linear` layer with our new `SparseAdaptiveLinear` layer in a pre-trained LLM for fine-tuning. When I load the state_dict, I get: `RuntimeError: Error(s) in loading state_dict for MyModel: size mismatch for MyModel.encoder.layer.0.attn.sparse_adaptive_linear.weight: copying a param with shape torch.Size([1024, 2048]) from checkpoint, but the current model has shape torch.Size([1024, 1024]).` What's the likely issue here if it's supposed to be a drop-in replacement?",Critiquing a novel architecture proposal for missing ablations or confounds,senior,0.1446384039900249,0.1322957198443579,-0.0123426841456669
+3,"Beyond marginal accuracy gains, when is QAT an absolute requirement over PTQ, regardless of implementation complexity?",Quantization-aware training vs post-training quantization,senior,0.1152263374485596,0.1034482758620689,-0.0117780615864906
+48,What's the difference between `torch.nn.utils.clip_grad_norm_` and `clip_grad_value_`? When would I use one over the other?,"Gradient clipping — when, why, and what threshold",senior,0.1706161137440758,0.1662468513853904,-0.0043692623586853
+137,"Getting `CUDA out of memory. Tried to allocate X GiB (total Y GiB) while already using Z GiB` during generation on a Llama-2-7B-chat model. Batch size 1, sequence length 2048. Is this just VRAM? We're using MHA.","Explaining attention mechanism variants (MHA, GQA, MQA, MLA) and tradeoffs",senior,0.1226053639846743,0.1952861952861952,0.0726808313015209
+83,"Why is loss scaling often unnecessary when using `bf16` mixed precision, unlike `fp16`?","Mixed precision training pitfalls (fp16 vs bf16, loss scaling, gradient underflow)",senior,0.1216216216216216,0.1962264150943396,0.074604793472718
+117,We've developed a new `GatedTransformerBlock` that combines our novel gating mechanism with standard multi-head attention and an FFN. Our experiments show a 1.2 BLEU improvement on a machine translation task compared to a vanilla Transformer block. What's the most critical ablation we're probably missing here?,Critiquing a novel architecture proposal for missing ablations or confounds,senior,0.091324200913242,0.1752577319587628,0.0839335310455208
+79,"We have a custom `collate_fn` for handling variable-length sequences with padding. Here's the relevant part: `def custom_collate(batch): max_len = max(len(x['input_ids']) for x in batch) padded_batch = [] for item in batch: item['input_ids'] = F.pad(item['input_ids'], (0, max_len - len(item['input_ids']))) padded_batch.append(item) return default_collate(padded_batch)`","Dataloader bottlenecks and how to profile/fix them (num_workers, pin_memory, prefetch)",senior,0.0983606557377049,0.1886792452830188,0.0903185895453139
+50,"Our MoE model's perplexity plateaued significantly higher than expected after 200k steps, and looking at our custom expert usage logs, some experts are consistently seeing 5x the load of others. The `aux_loss` was enabled with a weight of 0.01.",Mixture-of-Experts routing design choices and load balancing,senior,0.1079999999999999,0.234375,0.126375
+146,"We have a custom C++ serving framework that loads PyTorch models. How should we ensure that deployed models retain their experiment metadata (like run ID, Git commit, metrics) for auditing and debugging, since our serving layer isn't Python/MLflow native?",Versioning and reproducibility for ML experiments,staff,0.1441048034934497,0.1076923076923077,-0.036412495801142
+135,"I'm using gradient accumulation with DDP. I want to accumulate for `N` steps, then update. Here's my loop, but it seems to be hanging after the first few accumulation steps:
+
+```python
+for step, batch in enumerate(dataloader):
+    with model.no_sync() if (step + 1) % gradient_accumulation_steps != 0 else nullcontext():
+        output = model(batch)
+        loss = criterion(output, labels)
+        loss.backward()
+
+    if (step + 1) % gradient_accumulation_steps == 0:
+        optimizer.step()
+        optimizer.zero_grad()
+```
+What's wrong here?","Distributed training failures (NCCL hangs, rank mismatches, gradient sync bugs)",staff,0.2669245647969053,0.25,-0.0169245647969052
+122,"My `nvidia-smi` shows ~70GB used out of 80GB, but my PyTorch OOM message says `reserved in total by PyTorch` is 75GB. The PyTorch profiler and `torch.cuda.memory_summary()` show peak usage around 60GB. What's the discrepancy here? The OOM is definitely happening during forward pass.","GPU memory debugging (OOM diagnosis, activation checkpointing tradeoffs, memory fragmentation)",staff,0.1295546558704453,0.1176470588235294,-0.0119075970469159
+121,"We just fine-tuned our Llama-7B on a new 100k instruction set. Validation loss looked okay, but our internal eval on creative writing tasks completely tanked. Factual Q&A improved slightly. We ran all our standard dedup and quality filters.","Data curation for instruction tuning (dedup, quality filtering, diversity)",staff,0.1353711790393013,0.1342281879194631,-0.0011429911198382
+144,"When should I actually consider writing a custom CUDA kernel instead of just using `torch.bmm`, `einsum`, or `F.scaled_dot_product_attention`?",Custom CUDA kernel debugging basics and when you actually need one,staff,0.105515587529976,0.1097046413502109,0.0041890538202349
+100,"I'm experimenting with a custom LR schedule for an RL agent. It's a linear warmup to `1e-4` over 1000 steps, then holds `1e-4` constant for the remaining 50k steps. Does this make sense?",Learning rate schedule design and warmup tuning,staff,0.1083333333333333,0.1974248927038626,0.0890915593705293
+67,Got this after a few epochs on a new experimental vision model. Loss: 0.5 -> 0.3 -> 0.7 -> NaN. This happened a few times. What's the usual culprit when loss goes to NaN so quickly?,Overfitting vs underfitting diagnosis from loss curves alone,staff,0.1090146750524109,0.202020202020202,0.0930055269677911
+142,"We shipped a DPO-tuned model and it got slammed in A/B tests. Users are reporting it's too 'safe', 'boring', and 'generic'. Our preference dataset was collected by asking annotators to pick the 'more helpful and harmless' response. We used `beta=0.1` during DPO training.",DPO/IPO preference optimization pitfalls,staff,0.1019607843137254,0.2059800664451827,0.1040192821314572
+71,"I'm trying to implement a custom GRU cell and my memory usage keeps exploding. Here's the core loop. What am I missing?
+```python
+class CustomGRU(nn.Module):
+    def __init__(self, ...):
+        super().__init__()
+        # ... define layers for reset_gate, update_gate, new_state
+
+    def forward(self, input, h_prev):
+        # ... calculate gates and new_h
+        return new_h, new_h # return new_h twice for compatibility
+```
+Then in the training loop:
+```python
+hidden_state = torch.zeros(...)
+for t in range(seq_len):
+    output, hidden_state = model(input_seq[t], hidden_state)
+    # loss calculation and backward call here, but detached for simplicity
+```",Explaining backpropagation through time and its failure modes,staff,0.0931263858093126,0.2027649769585253,0.1096385911492127
+1,"I'm implementing a custom attention mechanism and noticed that when my sequence length approaches the total number of physical memory pages, `malloc` calls for KV tensors start failing or becoming extremely slow. I'm not explicitly using PagedAttention. Is this expected behavior?",KV cache memory math and context length scaling,staff,0.1396303901437371,0.2666666666666666,0.1270362765229295
