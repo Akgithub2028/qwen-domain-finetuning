@@ -111,7 +111,8 @@ The chart below compares ROUGE-L scores between the baseline and fine-tuned mode
 
 **Key takeaway:** the fine-tuned model outperforms the baseline consistently across *all* difficulty levels, with the largest relative gains appearing at the **Staff** level — suggesting fine-tuning helps most on the hardest, most nuanced examples.
 
-### 2️⃣ Top 10 Topics Improved by Fine-Tuning
+
+## 2️⃣ Top 10 Topics Improved by Fine-Tuning
 
 This chart ranks the topics with the **largest relative ROUGE-L improvement** after fine-tuning, highlighting exactly where the training data had the greatest impact.
 
