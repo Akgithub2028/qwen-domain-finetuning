@@ -23,7 +23,7 @@
 - [Results](#-results)
 - [Error & Regression Analysis](#-error--regression-analysis)
 - [Repository Structure](#-repository-structure)
-- [Notebook](#-notebook)
+- [Notebook](#-notebooks)
 - [Reproducibility](#-reproducibility)
 - [Model Weights](#️-model-weights)
 - [Author](#-author)
@@ -178,7 +178,7 @@ LLM-FineTuning-Project/
 
 The complete experimental workflow lives in:
 
-📔 [`notebook/fine_tuning.ipynb`](notebook/fine_tuning.ipynb)
+📔 [`notebooks/qwen_domain_finetuning.ipynb`](notebooks/qwen_domain_finetuning.ipynb)
 
 It walks through:
 
@@ -213,7 +213,7 @@ The [`results/`](results/) directory contains every generated evaluation output 
 
 This experiment was developed and executed on **Google Colab**. To reproduce it:
 
-1. Open the notebook in [`notebook/`](notebook/).
+1. Open the notebook in [`notebooks/`](notebooks/).
 2. Install the required dependencies.
 3. Prepare the dataset.
 4. Load the Qwen2.5-1.5B base model.
