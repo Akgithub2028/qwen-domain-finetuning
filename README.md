@@ -69,7 +69,7 @@ QLoRA enables parameter-efficient fine-tuning by keeping the base model quantize
 
 ```mermaid
 flowchart TD
-    A[Custom Dataset] --> B[Data Preparation]
+    A[Pre-built HuggingFace dataset] --> B[Data Preparation]
     B --> C[Train / Validation / Test Split]
     C --> D[Base Qwen2.5-1.5B]
     D --> E[QLoRA Fine-Tuning]
