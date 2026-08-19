@@ -97,7 +97,7 @@ The base model and the fine-tuned model were evaluated on the **exact same held-
 - ✅ Difficulty-wise performance breakdown
 - ✅ Regression analysis (where fine-tuning *hurt* performance)
 
-The goal was to **prove** measurable improvement with data — not simply assume that fine-tuning helps.
+The goal was to measure whether fine-tuning improves performance with data — not simply assume that it helps. Note that ROUGE-L and BERTScore capture surface-level and semantic similarity to the reference response, not correctness of the underlying technical content — so these results show the fine-tuned model matches the target response style and substance more closely, not that it is a strictly 'better engineer.
 
 ---
 
