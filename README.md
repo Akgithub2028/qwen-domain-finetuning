@@ -396,7 +396,6 @@ pip install torch transformers datasets peft bitsandbytes trl rouge-score bert-s
 
 
 [![GitHub](https://img.shields.io/badge/GitHub-Akgithub2028-181717?style=flat-square&logo=github)](https://github.com/Akgithub2028)
-[![Email](https://img.shields.io/badge/Email-aayaannkausar%40gmail.com-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:aayaannkausar@gmail.com)
 [![Interests](https://img.shields.io/badge/Focus-Agentic_AI_%7C_PEFT_%7C_LLM_Systems-007ACC?style=flat-square)](#)
 
 </div>
