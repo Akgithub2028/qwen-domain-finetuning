@@ -13,13 +13,6 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-lightgrey?style=flat-square)](LICENSE)
 
 <br/>
-
-<p align="center">
-  <b>Aayaann Kausar</b><br/>
-  <i>Indian Institute of Technology Kharagpur</i><br/>
-  <code>aayaannkausar@gmail.com</code> &nbsp;|&nbsp; <a href="https://github.com/Akgithub2028">@Akgithub2028</a>
-</p>
-
 <p align="center">
   <a href="#-abstract">Abstract</a> •
   <a href="#-theoretical-framework--methodology">Theoretical Framework</a> •
